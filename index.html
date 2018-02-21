@@ -1,9 +1,16 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>SAP</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	
+	
 </head>
+
 <body>
     <script>
         var data = null;
@@ -11,13 +18,28 @@
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = false;
 
-        xhr.addEventListener("readystatechange", function () {
+        xhr.addEventListener("readystatechange", function() {
             if (this.readyState === this.DONE) {
                 console.log(this.responseText);
-                document.getElementById("content").innerHTML = this.responseText;
+				var obj = JSON.parse(this.responseText);
+                
+				
+				setElementValueById("loginId", obj.Items[0].LoginID);
+				setElementValueById("employeeId",obj.Items[0].EmployeeID);
+				setElementValueById("firstName",obj.Items[0].FirstName);
+				setElementValueById("lastName",obj.Items[0].LastName);
+				setElementValueById("middleName",obj.Items[0].MiddleName);
+				setElementValueById("primaryEmail",obj.Items[0].PrimaryEmail);
+				setElementValueById("active",obj.Items[0].Active);
+				
             }
         });
 
+		function setElementValueById(id, value)
+		{
+			document.getElementById(id).value = value;
+		}
+		
         //setting request method
         //API endpoint for API sandbox
         xhr.open("GET", "https://sandbox.api.sap.com/concur/api/v3.0/common/users?employeeID=ConcurConsultant");
@@ -45,12 +67,38 @@
         //sending request
         xhr.send(data);
     </script>
-    <div style="width:100%" >
-	<h3>SAP integration</h3>
-        <p id="content" style="word-wrap: break-word;">
+   
 
-        </p>
-        <!--<textarea id="content"></textarea>-->
-    </div>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">SAP integration</h3>
+  </div>
+  <div class="panel-body">
+  <div class="col-md-6">
+					<label>LoginID</label>
+					<input id="loginId"  class="form-control" readonly>
+					<label>Employee ID</label>
+					<input id="employeeId"  class="form-control" readonly>
+					
+					<label>First name</label>
+					<input id="firstName" class="form-control" readonly>
+					
+					<label>Last name</label>
+					<input id="lastName" class="form-control" readonly>
+					
+					<label>Middle name</label>
+					<input id="middleName" class="form-control" readonly>
+					
+					<label>Primary Email</label>
+					<input id="primaryEmail" class="form-control" readonly>
+					
+					<label>Active</label>
+					<input id="active" class="form-control" readonly>
+					
+  </div>
+					
+  </div>
+</div>
+		
 </body>
 </html>
